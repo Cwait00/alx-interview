@@ -10,7 +10,7 @@ def pascal_triangle(n):
     Returns:
         list: A list of lists representing the Pascal's triangle.
     """
-    if n <= 0:
+    if n < 0:
         return []
 
     triangle = [[1]]
@@ -24,6 +24,7 @@ def pascal_triangle(n):
     return triangle
 
 # Test cases
+print("Pascal's triangle for n = 0:", pascal_triangle(0))
 print("Pascal's triangle for n = 1:", pascal_triangle(1))
 print("Pascal's triangle for n = 5:", pascal_triangle(5))
 print("Pascal's triangle for n = 10:", pascal_triangle(10))
