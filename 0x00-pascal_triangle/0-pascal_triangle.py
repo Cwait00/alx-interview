@@ -31,7 +31,7 @@ def display_triangle(triangle):
 
 if __name__ == "__main__":
     # Correcting output for various inputs
-    triangle_5 = pascal_triangle(6)  # Fixing the off-by-one error for the given test cases
+    triangle_5 = pascal_triangle(5)  # Correcting the input to match the desired number of rows
     display_triangle(triangle_5)
 
     triangle_1 = pascal_triangle(1)
@@ -40,8 +40,8 @@ if __name__ == "__main__":
     triangle_0 = pascal_triangle(0)
     display_triangle(triangle_0)
 
-    triangle_10 = pascal_triangle(11)
+    triangle_10 = pascal_triangle(10)
     display_triangle(triangle_10)
 
-    triangle_100 = pascal_triangle(101)
+    triangle_100 = pascal_triangle(100)
     display_triangle(triangle_100)
