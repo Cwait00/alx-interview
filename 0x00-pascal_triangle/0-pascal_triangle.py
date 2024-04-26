@@ -33,8 +33,24 @@ def display_triangle(triangle):
             print(num, end="")
         print("]")
 
-# Test cases
+# Test cases and documentation
 if __name__ == "__main__":
+    # Module documentation
+    """
+    This module generates and displays Pascal's triangle.
+    """
+
+    # Function documentation
+    """
+    Generates the Pascal's triangle up to the given number of rows.
+    
+    Args:
+        n (int): Number of rows of the Pascal's triangle to generate.
+        
+    Returns:
+        list: A list of lists representing the Pascal's triangle.
+    """
+
     # Correct output for n = 0
     triangle_0 = pascal_triangle(0)
     print("Pascal's triangle for n = 0:")
