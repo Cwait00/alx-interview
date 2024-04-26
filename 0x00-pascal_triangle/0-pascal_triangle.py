@@ -23,9 +23,34 @@ def pascal_triangle(n):
 
     return triangle
 
+# Display Pascal's triangle
+def display_triangle(triangle):
+    for row in triangle:
+        print("[", end="")
+        for i, num in enumerate(row):
+            if i > 0:
+                print(",", end="")
+            print(num, end="")
+        print("]")
+
 # Test cases
-print("Pascal's triangle for n = 0:", pascal_triangle(0))
-print("Pascal's triangle for n = 1:", pascal_triangle(1))
-print("Pascal's triangle for n = 5:", pascal_triangle(5))
-print("Pascal's triangle for n = 10:", pascal_triangle(10))
-print("Pascal's triangle for n = 100:", pascal_triangle(100))
+if __name__ == "__main__":
+    # Correct output for n = 0
+    triangle_0 = pascal_triangle(0)
+    print("Pascal's triangle for n = 0:")
+    display_triangle(triangle_0)
+    
+    # Correct output for n = 1
+    triangle_1 = pascal_triangle(1)
+    print("Pascal's triangle for n = 1:")
+    display_triangle(triangle_1)
+    
+    # Correct output for n = 5
+    triangle_5 = pascal_triangle(5)
+    print("Pascal's triangle for n = 5:")
+    display_triangle(triangle_5)
+    
+    # Correct output for n = 10
+    triangle_10 = pascal_triangle(10)
+    print("Pascal's triangle for n = 10:")
+    display_triangle(triangle_10)
