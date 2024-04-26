@@ -27,5 +27,8 @@ if __name__ == "__main__":
     triangle_5 = pascal_triangle(5)
     display_triangle(triangle_5)
     
+    triangle_10 = pascal_triangle(10)
+    display_triangle(triangle_10)
+    
     triangle_100 = pascal_triangle(100)
     display_triangle(triangle_100)
