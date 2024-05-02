@@ -1,17 +1,24 @@
 #!/usr/bin/python3
 
-def canUnlockAll(boxes):
-    n = len(boxes)
-    visited = set()
-    queue = [0]  # Start with the first box
+def canUnlockAll(box_keys):
+    visited_boxes = set()
 
-    while queue:
-        box = queue.pop(0)
-        visited.add(box)
-        keys = boxes[box]
+    def dfs(box):
+        visited_boxes.add(box)
+        for key in box_keys[box]:
+            if key not in visited_boxes:
+                dfs(key)
 
-        for key in keys:
-            if key < n and key not in visited:
-                queue.append(key)
+    dfs(0)
+    return len(visited_boxes) == len(box_keys)
 
-    return len(visited) == n
+# Test the function
+if __name__ == "__main__":
+    box_keys = [[1], [2], [3], [4], []]
+    print(canUnlockAll(box_keys)) # True
+
+    box_keys = [[1, 4, 6], [2], [0, 4, 1], [5, 6, 2], [3], [4, 1], [6]]
+    print(canUnlockAll(box_keys)) # True
+
+    box_keys = [[1, 4], [2], [0, 4, 1], [3], [], [4, 1], [5, 6]]
+    print(canUnlockAll(box_keys)) # False
