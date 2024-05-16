@@ -4,7 +4,6 @@ import sys
 import re
 from collections import defaultdict
 
-
 # Dictionary to store counts for each status code
 status_counts = defaultdict(int)
 
@@ -43,24 +42,30 @@ def print_statistics():
             print(f"{status_code}: {count}")
 
 
+def process_log_line(line):
+    global total_file_size
+    global line_count
+
+    ip_address, status_code, file_size = parse_log_line(line)
+
+    if ip_address is not None:
+        # Increment the count for the status code
+        status_counts[status_code] += 1
+
+        # Add file size to the total
+        total_file_size += file_size
+
+        # Increment line count
+        line_count += 1
+
+        # Print statistics after every 10 lines
+        if line_count % 10 == 0:
+            print_statistics()
+
+
 try:
     for line in sys.stdin:
-        # Parse the log line
-        ip_address, status_code, file_size = parse_log_line(line)
-
-        if ip_address is not None:
-            # Increment the count for the status code
-            status_counts[status_code] += 1
-
-            # Add file size to the total
-            total_file_size += file_size
-
-            # Increment line count
-            line_count += 1
-
-            # Print statistics after every 10 lines
-            if line_count % 10 == 0:
-                print_statistics()
+        process_log_line(line)
 
 except KeyboardInterrupt:
     # If Ctrl+C is pressed, print final statistics
