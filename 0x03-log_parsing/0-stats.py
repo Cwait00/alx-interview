@@ -43,6 +43,15 @@ try:
             else:
                 print(f"Invalid log line format: {line}", file=sys.stderr)
 
+        # Check for keyboard interruption after each line
+        if line_count % 1:
+            try:
+                input("Press Enter to continue, or Ctrl+C to quit: ")
+            except KeyboardInterrupt:
+                print("\nCtrl+C detected. Printing statistics:")
+                print_statistics(status_code_count, total_file_size)
+                break
+
     # Print statistics at the end of input
     print_statistics(status_code_count, total_file_size)
 
