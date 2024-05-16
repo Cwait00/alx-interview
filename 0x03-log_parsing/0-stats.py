@@ -15,26 +15,28 @@ line_count = 0
 
 
 def parse_log_line(line):
-    # Regular expression to extract relevant information from log line
+    """
+    Parse log line to extract IP address, status code, and file size.
+    """
+    # Regular expression pattern to extract relevant information
     pattern = (
-        r"(\d+\.\d+\.\d+\.\d+) - \[.*\] "
-        r"\"GET /projects/260 HTTP/1.1\" (\d+) (\d+)"
+        r'^(\S+) \S+ \S+ \[.*?\] '
+        r'"(GET|POST) /projects/260 HTTP/1.1" (\d+) (\d+)$'
     )
     # Match the pattern against the log line
     match = re.match(pattern, line)
     if match:
-        ip_address, status_code, file_size = match.groups()
+        ip_address, method, status_code, file_size = match.groups()
         return ip_address, int(status_code), int(file_size)
     else:
         return None, None, None
 
 
 def print_statistics():
-    global total_file_size
-    global status_counts
-
+    """
+    Print total file size and status code counts.
+    """
     print("Total file size:", total_file_size)
-
     # Print status counts in ascending order
     for status_code in sorted(status_counts.keys()):
         count = status_counts[status_code]
@@ -43,6 +45,9 @@ def print_statistics():
 
 
 def process_log_line(line):
+    """
+    Process log line and update statistics.
+    """
     global total_file_size
     global line_count
 
@@ -63,11 +68,18 @@ def process_log_line(line):
             print_statistics()
 
 
-try:
-    for line in sys.stdin:
-        process_log_line(line)
+def main():
+    """
+    Main function to process log lines from stdin.
+    """
+    try:
+        for line in sys.stdin:
+            process_log_line(line)
+    except KeyboardInterrupt:
+        # If Ctrl+C is pressed, print final statistics
+        print_statistics()
+        sys.exit(0)
 
-except KeyboardInterrupt:
-    # If Ctrl+C is pressed, print final statistics
-    print_statistics()
-    sys.exit(0)
+
+if __name__ == "__main__":
+    main()
