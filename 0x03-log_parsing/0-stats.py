@@ -1,85 +1,51 @@
 #!/usr/bin/python3
-
 import sys
 import re
 from collections import defaultdict
 
-# Dictionary to store counts for each status code
-status_counts = defaultdict(int)
+# Regular expression pattern to match the log line format
+log_pattern = re.compile(r'^(\d+\.\d+\.\d+\.\d+) \-\ \[(.+)\]'
+                         r" \"GET /projects/260 HTTP/1\.1\" (\d+) (\d+)$")
 
-# Total file size
+# Initialize variables to store metrics
 total_file_size = 0
-
-# Counter to keep track of lines read
+status_code_count = defaultdict(int)
 line_count = 0
 
 
-def parse_log_line(line):
-    """
-    Parse log line to extract IP address, status code, and file size.
-    """
-    # Regular expression pattern to extract relevant information
-    pattern = (
-        r'^(\S+) \S+ \S+ \[.*?\] '
-        r'"(GET|POST) /projects/260 HTTP/1.1" (\d+) (\d+)$'
-    )
-    # Match the pattern against the log line
-    match = re.match(pattern, line)
-    if match:
-        ip_address, method, status_code, file_size = match.groups()
-        return ip_address, int(status_code), int(file_size)
-    else:
-        return None, None, None
-
-
-def print_statistics():
-    """
-    Print total file size and status code counts.
-    """
+# Function to print statistics
+def print_statistics(status_code_count, total_file_size):
     print("Total file size:", total_file_size)
-    # Print status counts in ascending order
-    for status_code in sorted(status_counts.keys()):
-        count = status_counts[status_code]
-        if count > 0:
-            print(f"{status_code}: {count}")
+    print("Number of lines by status code:")
+    for code in sorted(status_code_count.keys()):
+        print(f"{code}: {status_code_count[code]}")
+    print()
 
 
-def process_log_line(line):
-    """
-    Process log line and update statistics.
-    """
-    global total_file_size
-    global line_count
+try:
+    for line in sys.stdin:
+        line = line.strip()
+        match = log_pattern.match(line)
+        if match:
+            groups = match.groups()
+            if len(groups) == 4:
+                ip_address, date, status_code, file_size = groups
+                status_code = int(status_code)
+                file_size = int(file_size)
 
-    ip_address, status_code, file_size = parse_log_line(line)
+                total_file_size += file_size
+                status_code_count[status_code] += 1
+                line_count += 1
 
-    if ip_address is not None:
-        # Increment the count for the status code
-        status_counts[status_code] += 1
+                # Print statistics after every 10 lines
+                if line_count % 10 == 0:
+                    print_statistics(status_code_count, total_file_size)
+            else:
+                print(f"Invalid log line format: {line}", file=sys.stderr)
 
-        # Add file size to the total
-        total_file_size += file_size
+    # Print statistics at the end of input
+    print_statistics(status_code_count, total_file_size)
 
-        # Increment line count
-        line_count += 1
-
-        # Print statistics after every 10 lines
-        if line_count % 10 == 0:
-            print_statistics()
-
-
-def main():
-    """
-    Main function to process log lines from stdin.
-    """
-    try:
-        for line in sys.stdin:
-            process_log_line(line)
-    except KeyboardInterrupt:
-        # If Ctrl+C is pressed, print final statistics
-        print_statistics()
-        sys.exit(0)
-
-
-if __name__ == "__main__":
-    main()
+except KeyboardInterrupt:
+    print("\nCtrl+C detected. Printing statistics:")
+    print_statistics(status_code_count, total_file_size)
