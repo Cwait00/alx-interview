@@ -17,8 +17,10 @@ line_count = 0
 
 def parse_log_line(line):
     # Regular expression to extract relevant information from log line
-    pattern = r"(\d+\.\d+\.\d+\.\d+) - \[.*\] \"GET /projects/260 HTTP/1.1\" (\d+) (\d+)"
-
+    pattern = (
+        r"(\d+\.\d+\.\d+\.\d+) - \[.*\] "
+        r"\"GET /projects/260 HTTP/1.1\" (\d+) (\d+)"
+    )
     # Match the pattern against the log line
     match = re.match(pattern, line)
     if match:
@@ -32,7 +34,7 @@ def print_statistics():
     global total_file_size
     global status_counts
 
-    print("File size:", total_file_size)
+    print("Total file size:", total_file_size)
 
     # Print status counts in ascending order
     for status_code in sorted(status_counts.keys()):
