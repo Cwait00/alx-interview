@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-
 import sys
 import re
 from collections import defaultdict
@@ -42,6 +41,10 @@ try:
                 # Print statistics after every 10 lines
                 if line_count % 10 == 0:
                     print_statistics(status_code_count, total_file_size)
+
+        else:
+            # Handle incorrect log format
+            print(f"Invalid log format: {line}", file=sys.stderr)
 
 
 except KeyboardInterrupt:
