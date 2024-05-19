@@ -6,7 +6,10 @@ from collections import defaultdict
 
 
 # Regular expression pattern to match the log line format
-log_pattern = re.compile(r'^(\d+\.\d+\.\d+\.\d+) - \[(.+)\] "GET /projects/260 HTTP/1\.1" (\d+) (\d+)$')
+log_pattern = re.compile(
+    r'^(\d+\.\d+\.\d+\.\d+) - \[(.+)\] "GET /projects/260 HTTP/1\.1" '
+    r'(\d+) (\d+)$'
+)
 
 # Initialize variables to store metrics
 total_file_size = 0
