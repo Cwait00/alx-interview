@@ -1,11 +1,12 @@
 #!/usr/bin/python3
+
 import sys
 import re
 from collections import defaultdict
 
+
 # Regular expression pattern to match the log line format
-log_pattern = re.compile(r'^(\d+\.\d+\.\d+\.\d+) \-\ \[(.+)\]'
-                         r" \"GET /projects/260 HTTP/1\.1\" (\d+) (\d+)$")
+log_pattern = re.compile(r'^(\d+\.\d+\.\d+\.\d+) - \[(.+)\] "GET /projects/260 HTTP/1\.1" (\d+) (\d+)$')
 
 # Initialize variables to store metrics
 total_file_size = 0
@@ -15,11 +16,9 @@ line_count = 0
 
 # Function to print statistics
 def print_statistics(status_code_count, total_file_size):
-    print("Total file size:", total_file_size)
-    print("Number of lines by status code:")
+    print(f"File size: {total_file_size}")
     for code in sorted(status_code_count.keys()):
         print(f"{code}: {status_code_count[code]}")
-    print()
 
 
 try:
@@ -40,21 +39,13 @@ try:
                 # Print statistics after every 10 lines
                 if line_count % 10 == 0:
                     print_statistics(status_code_count, total_file_size)
-            else:
-                print(f"Invalid log line format: {line}", file=sys.stderr)
 
-        # Check for keyboard interruption after each line
-        if line_count % 1:
-            try:
-                input("Press Enter to continue, or Ctrl+C to quit: ")
-            except KeyboardInterrupt:
-                print("\nCtrl+C detected. Printing statistics:")
-                print_statistics(status_code_count, total_file_size)
-                break
-
-    # Print statistics at the end of input
-    print_statistics(status_code_count, total_file_size)
 
 except KeyboardInterrupt:
-    print("\nCtrl+C detected. Printing statistics:")
+    pass
+
+# Print final statistics at the end of input
+if line_count > 0:
     print_statistics(status_code_count, total_file_size)
+else:
+    print("File size: 0")
