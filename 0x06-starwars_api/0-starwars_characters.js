@@ -2,13 +2,10 @@
 
 const request = require('request');
 
-// Extracting movie ID from command line arguments
 const movieID = process.argv[2];
 
-// API endpoint for fetching movie data
 const movieURL = `https://swapi.dev/api/films/${movieID}/`;
 
-// Function to fetch character data for a given movie
 function fetchCharacters(movieURL) {
   return new Promise((resolve, reject) => {
     request(movieURL, (error, response, body) => {
@@ -23,7 +20,6 @@ function fetchCharacters(movieURL) {
   });
 }
 
-// Function to fetch and display character names
 async function printCharacters(movieID) {
   try {
     const charactersURLs = await fetchCharacters(movieURL);
@@ -36,7 +32,6 @@ async function printCharacters(movieID) {
   }
 }
 
-// Function to fetch character data from a given character URL
 function fetchCharacter(characterURL) {
   return new Promise((resolve, reject) => {
     request(characterURL, (error, response, body) => {
@@ -50,5 +45,4 @@ function fetchCharacter(characterURL) {
   });
 }
 
-// Calling the function to print character names
 printCharacters(movieID);
