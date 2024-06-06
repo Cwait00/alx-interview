@@ -3,14 +3,15 @@
 const request = require('request');
 
 const movieID = process.argv[2];
-
-const movieURL = `https://swapi.dev/api/films/${movieID}/`;
+const baseURL = 'https://swapi.dev/api/films/';
 
 function fetchCharacters(movieURL) {
   return new Promise((resolve, reject) => {
     request(movieURL, (error, response, body) => {
       if (error) {
         reject(error);
+      } else if (response.statusCode !== 200) {
+        reject(new Error(`Failed to fetch data: ${response.statusCode}`));
       } else {
         const filmData = JSON.parse(body);
         const charactersURLs = filmData.characters;
@@ -21,6 +22,8 @@ function fetchCharacters(movieURL) {
 }
 
 async function printCharacters(movieID) {
+  const movieURL = `${baseURL}${movieID}/`;
+
   try {
     const charactersURLs = await fetchCharacters(movieURL);
     for (const characterURL of charactersURLs) {
@@ -37,6 +40,8 @@ function fetchCharacter(characterURL) {
     request(characterURL, (error, response, body) => {
       if (error) {
         reject(error);
+      } else if (response.statusCode !== 200) {
+        reject(new Error(`Failed to fetch data: ${response.statusCode}`));
       } else {
         const characterData = JSON.parse(body);
         resolve(characterData);
