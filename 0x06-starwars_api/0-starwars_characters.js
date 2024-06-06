@@ -2,47 +2,42 @@
 
 const request = require('request');
 
-const movieID = process.argv[2];
-
-const movieURL = `https://swapi.dev/api/films/${movieID}/`;
-
-function fetchCharacters(movieURL) {
-  return new Promise((resolve, reject) => {
-    request(movieURL, (error, response, body) => {
-      if (error) {
-        reject(error);
-      } else {
-        const filmData = JSON.parse(body);
-        const charactersURLs = filmData.characters;
-        resolve(charactersURLs);
-      }
-    });
-  });
+if (process.argv.length !== 3) {
+  console.log('Usage: ./0-starwars_characters.js <Movie ID>');
+  process.exit(1);
 }
 
-async function printCharacters(movieID) {
-  try {
-    const charactersURLs = await fetchCharacters(movieURL);
-    for (const characterURL of charactersURLs) {
-      const characterData = await fetchCharacter(characterURL);
-      console.log(characterData.name);
-    }
-  } catch (error) {
+const movieId = process.argv[2];
+const url = `https://swapi-api.hbtn.io/api/films/${movieId}/`;
+
+request(url, (error, response, body) => {
+  if (error) {
     console.error('Error:', error);
+    return;
   }
-}
 
-function fetchCharacter(characterURL) {
-  return new Promise((resolve, reject) => {
-    request(characterURL, (error, response, body) => {
-      if (error) {
-        reject(error);
-      } else {
-        const characterData = JSON.parse(body);
-        resolve(characterData);
+  if (response.statusCode !== 200) {
+    console.error('Failed to retrieve data. Status code:', response.statusCode);
+    return;
+  }
+
+  const filmData = JSON.parse(body);
+  const characters = filmData.characters;
+
+  characters.forEach((characterUrl) => {
+    request(characterUrl, (charError, charResponse, charBody) => {
+      if (charError) {
+        console.error('Error:', charError);
+        return;
       }
+
+      if (charResponse.statusCode !== 200) {
+        console.error('Failed to retrieve character data. Status code:', charResponse.statusCode);
+        return;
+      }
+
+      const characterData = JSON.parse(charBody);
+      console.log(characterData.name);
     });
   });
-}
-
-printCharacters(movieID);
+});
