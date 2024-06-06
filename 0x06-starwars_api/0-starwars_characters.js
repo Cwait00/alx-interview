@@ -2,34 +2,47 @@
 
 const request = require('request');
 
-const movieId = process.argv[2];
-const apiUrl = `https://swapi-api.hbtn.io/api/films/${movieId}/`;
+const movieID = process.argv[2];
 
-request(apiUrl, (error, response, body) => {
-  if (error) {
-    console.error('Error:', error);
-    return;
-  }
+const movieURL = `https://swapi.dev/api/films/${movieID}/`;
 
-  if (response.statusCode === 200) {
-    const filmData = JSON.parse(body);
-    const characters = filmData.characters;
-
-    // Fetching all character names
-    characters.forEach((characterUrl) => {
-      request(characterUrl, (charError, charResponse, charBody) => {
-        if (charError) {
-          console.error('Error:', charError);
-          return;
-        }
-
-        if (charResponse.statusCode === 200) {
-          const characterData = JSON.parse(charBody);
-          console.log(characterData.name);
-        }
-      });
+function fetchCharacters(movieURL) {
+  return new Promise((resolve, reject) => {
+    request(movieURL, (error, response, body) => {
+      if (error) {
+        reject(error);
+      } else {
+        const filmData = JSON.parse(body);
+        const charactersURLs = filmData.characters;
+        resolve(charactersURLs);
+      }
     });
-  } else {
-    console.error(`Error: Unable to fetch movie with ID ${movieId}`);
+  });
+}
+
+async function printCharacters(movieID) {
+  try {
+    const charactersURLs = await fetchCharacters(movieURL);
+    for (const characterURL of charactersURLs) {
+      const characterData = await fetchCharacter(characterURL);
+      console.log(characterData.name);
+    }
+  } catch (error) {
+    console.error('Error:', error);
   }
-});
+}
+
+function fetchCharacter(characterURL) {
+  return new Promise((resolve, reject) => {
+    request(characterURL, (error, response, body) => {
+      if (error) {
+        reject(error);
+      } else {
+        const characterData = JSON.parse(body);
+        resolve(characterData);
+      }
+    });
+  });
+}
+
+printCharacters(movieID);
