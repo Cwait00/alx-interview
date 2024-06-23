@@ -15,10 +15,6 @@ def makeChange(coins, total):
     if total <= 0:
         return 0
 
-    max_coin = max(coins)
-    if total > max_coin * total:
-        return -1
-
     dp = [float('inf')] * (total + 1)
     dp[0] = 0  # Base case
 
