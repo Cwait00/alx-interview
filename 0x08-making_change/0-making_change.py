@@ -15,11 +15,9 @@ def makeChange(coins, total):
     if total <= 0:
         return 0
 
-    # Define a large enough limit for the dynamic programming approach
-    MAX_TOTAL = 10000  # This can be adjusted based on typical usage scenarios
-
-    if total > MAX_TOTAL:
-        return -1  # Indicating the problem is too large to handle efficiently
+    max_coin = max(coins)
+    if total > max_coin * total:
+        return -1
 
     dp = [float('inf')] * (total + 1)
     dp[0] = 0  # Base case
