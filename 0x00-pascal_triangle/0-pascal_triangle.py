@@ -10,6 +10,9 @@ def pascal_triangle(n):
     Returns:
         list: A list of lists representing Pascal's triangle.
     """
+    if n <= 0:
+        return []
+
     triangle = [[1]]
     for i in range(1, n):
         row = [1]
@@ -18,30 +21,3 @@ def pascal_triangle(n):
         row.append(1)
         triangle.append(row)
     return triangle
-
-def display_triangle(triangle):
-    """
-    Displays the Pascal's triangle.
-
-    Args:
-        triangle (list): A list of lists representing Pascal's triangle.
-    """
-    for row in triangle:
-        print(" ".join(map(str, row)))
-
-if __name__ == "__main__":
-    # Correcting output for various inputs
-    triangle_5 = pascal_triangle(5)  # Correcting the input to match the desired number of rows
-    display_triangle(triangle_5)
-
-    triangle_1 = pascal_triangle(1)
-    display_triangle(triangle_1)
-
-    triangle_0 = pascal_triangle(0)
-    display_triangle(triangle_0)
-
-    triangle_10 = pascal_triangle(10)
-    display_triangle(triangle_10)
-
-    triangle_100 = pascal_triangle(100)
-    display_triangle(triangle_100)
