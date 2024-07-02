@@ -1,55 +1,71 @@
 #!/usr/bin/python3
 
-def sieve(n):
-    """Use the Sieve of Eratosthenes to find all primes up to n."""
-    is_prime = [True] * (n + 1)
-    is_prime[0] = is_prime[1] = False
-    p = 2
-    while p * p <= n:
-        if is_prime[p]:
-            for i in range(p * p, n + 1, p):
-                is_prime[i] = False
-        p += 1
-    primes = [p for p in range(n + 1) if is_prime[p]]
-    return primes
-
-def play_game(n, primes):
-    """Simulate the game for a given n."""
-    if n < 2:
-        return "Ben"
-    remaining = set(range(1, n + 1))
-    current_player = "Maria"
-    while True:
-        move_made = False
-        for prime in primes:
-            if prime in remaining:
-                move_made = True
-                multiples = set(range(prime, n + 1, prime))
-                remaining -= multiples
-                current_player = "Ben" if current_player == "Maria" else "Maria"
-                break
-        if not move_made:
-            return current_player
-
 def isWinner(x, nums):
-    """Determine the winner of each game and return the overall winner."""
-    max_n = max(nums)
-    primes = sieve(max_n)
-    maria_wins = 0
-    ben_wins = 0
-    for n in nums:
-        winner = play_game(n, primes)
-        if winner == "Maria":
-            ben_wins += 1
-        else:
-            maria_wins += 1
-    if maria_wins > ben_wins:
-        return "Maria"
-    elif ben_wins > maria_wins:
-        return "Ben"
-    else:
-        return None
+  """
+  This function determines the winner of the Prime Game based on optimal play.
 
-# Example usage
+  Args:
+      x: Number of rounds in the game.
+      nums: List of consecutive integers representing the starting set
+      for each round.
+
+  Returns:
+      str: Name of the player with the most wins ("Maria" or "Ben").
+           None if the winner cannot be determined.
+  """
+  maria_wins = 0
+  ben_wins = 0
+  for _ in range(x):
+    # Pre-calculate primes for efficiency (Sieve of Eratosthenes)
+    primes = sieve(max(nums))
+    # Track remaining numbers and removed numbers
+    remaining = set(nums)
+    removed = set()
+    turn = "Maria"  # Maria always goes first
+
+    while primes:
+      # Find the smallest prime that can be removed by the current player
+      smallest_prime = min(p for p in primes if p in remaining)
+      removed.update(set(range(smallest_prime, max(nums) + 1, smallest_prime)))
+      remaining.difference_update(removed)
+      # Update turn and remove primes from available options
+      primes.remove(smallest_prime)
+      turn = "Ben" if turn == "Maria" else "Maria"
+
+      # Check if the opponent has no valid move left
+      if not remaining.intersection(primes):
+        if turn == "Maria":
+          maria_wins += 1
+        else:
+          ben_wins += 1
+        break
+
+  # Determine and return the winner based on win count
+  if maria_wins > ben_wins:
+    return "Maria"
+  elif maria_wins < ben_wins:
+    return "Ben"
+  else:
+    return None
+
+def sieve(n):
+  """
+  This function implements the Sieve of Eratosthenes to find all primes
+  up to a limit.
+
+  Args:
+      n: Upper limit for finding primes.
+
+  Returns:
+      set: Set of all prime numbers less than or equal to n.
+  """
+  primes = set(range(2, n + 1))
+  for i in range(2, int(n**0.5) + 1):
+    if i in primes:
+      primes.difference_update(set(range(i * i, n + 1, i)))
+  return primes
+
+# Example usage (assuming main_0.py exists in the same directory)
 if __name__ == "__main__":
-    print("Winner: {}".format(isWinner(5, [2, 5, 1, 4, 3])))
+  winner = isWinner(3, [4, 5, 1])
+  print("Winner:", winner)
