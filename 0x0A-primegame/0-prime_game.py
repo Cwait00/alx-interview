@@ -1,13 +1,17 @@
 #!/usr/bin/python3
+"""
+Prime Game Module
+"""
+
 
 def isWinner(x, nums):
     """
     Determines the winner of the Prime Game based on optimal play.
 
     Args:
-        x: Number of rounds in the game.
-        nums: List of consecutive integers representing the starting
-              set for each round.
+        x (int): Number of rounds in the game.
+        nums (list): List of integers representing the starting set
+                     for each round.
 
     Returns:
         str: Name of the player with the most wins ("Maria" or "Ben").
