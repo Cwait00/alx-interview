@@ -24,27 +24,21 @@ def isWinner(x, nums):
             if is_prime[p]:
                 for multiple in range(p * p, n + 1, p):
                     is_prime[multiple] = False
-        return [p for p, prime in enumerate(is_prime) if prime]
+        return is_prime
 
     max_num = max(nums)
-    primes = sieve(max_num)
+    is_prime = sieve(max_num)
 
-    def count_primes(n):
-        """Counts primes up to n."""
-        count = 0
-        for prime in primes:
-            if prime <= n:
-                count += 1
-            else:
-                break
-        return count
+    # Create a prefix sum of primes up to the maximum number in nums
+    prime_count = [0] * (max_num + 1)
+    for i in range(1, max_num + 1):
+        prime_count[i] = prime_count[i - 1] + (1 if is_prime[i] else 0)
 
     maria_wins = 0
     ben_wins = 0
 
     for n in nums:
-        prime_count = count_primes(n)
-        if prime_count % 2 == 1:
+        if prime_count[n] % 2 == 1:
             maria_wins += 1
         else:
             ben_wins += 1
