@@ -14,37 +14,31 @@ def canUnlockAll(boxes):
         return False
 
     n = len(boxes)
-    visited = [False] * n
-    visited[0] = True
+    opened = [False] * n
+    opened[0] = True
     stack = [0]
 
     while stack:
         current = stack.pop()
         for key in boxes[current]:
-            if 0 <= key < n and not visited[key]:
-                visited[key] = True
+            if 0 <= key < n and not opened[key]:
+                opened[key] = True
                 stack.append(key)
 
-    return all(visited)
+    return all(opened)
 
 
 if __name__ == "__main__":
     boxes = [[1], [2], [3], [4], []]
     print(canUnlockAll(boxes))  # Expected output: True
 
-    boxes = [
-        [1, 4, 6], [2], [0, 4, 1], [5, 6, 2], [3], [4, 1], [6]
-    ]
+    boxes = [[1, 4, 5], [2], [5, 2], [3], [4, 1], [3, 5]]
     print(canUnlockAll(boxes))  # Expected output: True
 
-    boxes = [
-        [1, 2], [0], [3], [4], [5], [6], [7], [8], [9], [10], [11], []
-    ]
+    boxes = [[1, 2], [0], [3], [4], [5], [6], [7], [8], [9], [10], [11], []]
     print(canUnlockAll(boxes))  # Expected output: False
 
-    boxes = [
-        [4, 6], [2], [0, 4, 1], [3], [], [4, 1], [5, 6]
-    ]
+    boxes = [[4, 6], [2], [0, 4, 1], [3], [], [4, 1], [5, 6]]
     print(canUnlockAll(boxes))  # Expected output: True
 
     boxes = [[0]]
