@@ -16,14 +16,14 @@ def canUnlockAll(boxes):
     n = len(boxes)
     opened = [False] * n
     opened[0] = True
-    stack = [0]
+    queue = [0]
 
-    while stack:
-        current = stack.pop()
+    while queue:
+        current = queue.pop(0)
         for key in boxes[current]:
             if 0 <= key < n and not opened[key]:
                 opened[key] = True
-                stack.append(key)
+                queue.append(key)
 
     return all(opened)
 
