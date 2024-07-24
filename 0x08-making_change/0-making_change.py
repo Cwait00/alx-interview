@@ -3,6 +3,7 @@
 This module contains the makeChange function.
 """
 
+
 def makeChange(coins, total):
     """
     Determines the fewest number of coins needed to meet a given total amount.
@@ -28,6 +29,7 @@ def makeChange(coins, total):
                 dp[i] = min(dp[i], dp[i - coin] + 1)
 
     return dp[total] if dp[total] != float('inf') else -1
+
 
 # Main function for testing
 if __name__ == "__main__":
