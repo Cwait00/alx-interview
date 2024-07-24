@@ -21,7 +21,8 @@ def makeChange(coins, total):
     # Fill dp array using the recurrence relation
     for coin in coins:
         for i in range(coin, total + 1):
-            dp[i] = min(dp[i], dp[i - coin] + 1)
+            if dp[i - coin] != float('inf'):
+                dp[i] = min(dp[i], dp[i - coin] + 1)
 
     return dp[total] if dp[total] != float('inf') else -1
 
