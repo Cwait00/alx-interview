@@ -1,7 +1,4 @@
 #!/usr/bin/python3
-"""
-This module contains the makeChange function.
-"""
 
 
 def makeChange(coins, total):
@@ -12,17 +9,9 @@ def makeChange(coins, total):
     :return: Fewest number of coins needed to meet the total,
     or -1 if it cannot be met.
     """
-    if total <= 0:
-        return 0
-
-    # Initialize the dp array
     dp = [float('inf')] * (total + 1)
-    dp[0] = 0  # Base case: no coins needed to make 0 amount
+    dp[0] = 0
 
-    # Sort coins to start with smaller denominations
-    coins.sort()
-
-    # Update dp array for each coin
     for coin in coins:
         for i in range(coin, total + 1):
             dp[i] = min(dp[i], dp[i - coin] + 1)
