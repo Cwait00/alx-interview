@@ -19,10 +19,9 @@ def makeChange(coins, total):
     dp[0] = 0  # Base case
 
     # Fill dp array using the recurrence relation
-    for i in range(1, total + 1):
-        for coin in coins:
-            if i >= coin:
-                dp[i] = min(dp[i], dp[i - coin] + 1)
+    for coin in coins:
+        for i in range(coin, total + 1):
+            dp[i] = min(dp[i], dp[i - coin] + 1)
 
     return dp[total] if dp[total] != float('inf') else -1
 
